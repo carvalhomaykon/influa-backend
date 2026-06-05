@@ -2,11 +2,7 @@ package com.influa.influa.model.user;
 
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +26,9 @@ public class Company {
     private String description;
     private String niche;
     private String targetAudience;
+
+    @ManyToOne
+    @JoinColumn(name = "contractor_id", nullable = false)
+    private Contractor contractor;
 
 }

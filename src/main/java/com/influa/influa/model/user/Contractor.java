@@ -1,5 +1,6 @@
 package com.influa.influa.model.user;
 
+import com.influa.influa.dtos.user.ContractorDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,12 +14,11 @@ import lombok.Setter;
 @Table(name = "contractors")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Contractor extends User{
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    public Contractor(ContractorDTO contractorDTO) {
+        super(contractorDTO.userDTO());
+    }
 
 }
