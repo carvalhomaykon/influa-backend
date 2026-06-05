@@ -21,11 +21,11 @@ public class InfluencerService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Influencer createInfluencer(UserDTO userDTO, InfluencerDTO influencerDTO) {
+    public Influencer createInfluencer(InfluencerDTO influencerDTO) {
 
-        Influencer newInfluencer = new Influencer(userDTO, influencerDTO);
+        Influencer newInfluencer = new Influencer(influencerDTO);
 
-        newInfluencer.setPassword(passwordEncoder.encode(userDTO.password()));
+        newInfluencer.setPassword(passwordEncoder.encode(influencerDTO.userDTO().password()));
         
         return influencerRepository.save(newInfluencer);
     }
