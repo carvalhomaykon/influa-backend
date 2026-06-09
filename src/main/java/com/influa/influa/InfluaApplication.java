@@ -9,5 +9,4 @@ public class InfluaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InfluaApplication.class, args);
 	}
-
 }

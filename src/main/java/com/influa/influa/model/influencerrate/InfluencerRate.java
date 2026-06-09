@@ -3,6 +3,7 @@ package com.influa.influa.model.influencerrate;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.influa.influa.dtos.influencerrate.InfluencerRateDTO;
 import com.influa.influa.model.socialnetwork.EnumPlatform;
 import com.influa.influa.model.user.Influencer;
 
@@ -39,5 +40,13 @@ public class InfluencerRate {
     @ManyToOne
     @JoinColumn(name = "influencer_id")
     private Influencer influencer;
+
+    public InfluencerRate(InfluencerRateDTO influencerRateDTO) {
+        this.platform = influencerRateDTO.platform();
+        this.amount = influencerRateDTO.amount();
+        this.startingPrice = influencerRateDTO.startingPrice();
+        this.endPrice = influencerRateDTO.endPrice();
+        this.description = influencerRateDTO.description();
+    }
 
 }
