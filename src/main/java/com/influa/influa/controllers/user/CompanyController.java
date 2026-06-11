@@ -24,28 +24,27 @@ import com.influa.influa.services.user.CompanyService;
 @Controller
 @RequestMapping("/users/contractors/company")
 public class CompanyController {
-    
+
     @Autowired
     private CompanyService companyService;
 
     @PostMapping
     public ResponseEntity<Company> registerCompany(
-        @RequestBody CompanyDTO companyDTO,
-        @AuthenticationPrincipal UserDetails userLogged
-    ) {
+            @RequestBody CompanyDTO companyDTO,
+            @AuthenticationPrincipal UserDetails userLogged) {
         Company company = companyService.createCompany(companyDTO, userLogged.getUsername());
 
         return new ResponseEntity<>(company, HttpStatus.CREATED);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Company>> findAllCompany(@AuthenticationPrincipal UserDetails userLogged){
+    public ResponseEntity<List<Company>> findAllCompany(@AuthenticationPrincipal UserDetails userLogged) {
         List<Company> companies = companyService.findAllByContractorId(userLogged.getUsername());
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Company> findCompanyById(@PathVariable UUID id){
+    public ResponseEntity<Company> findCompanyById(@PathVariable UUID id) {
         Company company = companyService.findCompanyById(id);
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
