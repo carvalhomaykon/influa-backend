@@ -1,8 +1,8 @@
 package com.influa.influa.dtos.socialnetwork;
 
-public record CompanySocialNetworkDTO(
-        SocialNetworkDTO socialNetworkDTO,
+import java.util.UUID;
 
-        String company
-) {
+public record CompanySocialNetworkDTO(
+                SocialNetworkDTO socialNetworkDTO,
+                UUID company) {
 }

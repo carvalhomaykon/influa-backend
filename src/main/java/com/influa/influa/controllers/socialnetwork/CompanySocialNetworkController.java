@@ -28,17 +28,17 @@ public class CompanySocialNetworkController {
 
     @PostMapping("/{idCompany}")
     public ResponseEntity<CompanySocialNetwork> registerCompanySocialNetwork(
-        @RequestBody CompanySocialNetworkDTO companySocialNetworkDTO, 
-        @PathVariable UUID idCompany
-    ) {
+            @RequestBody CompanySocialNetworkDTO companySocialNetworkDTO,
+            @PathVariable UUID idCompany) {
 
-        CompanySocialNetwork companySocialNetwork = companySocialNetworkService.createCompanySocialNetwork(companySocialNetworkDTO, idCompany);
+        CompanySocialNetwork companySocialNetwork = companySocialNetworkService
+                .createCompanySocialNetwork(companySocialNetworkDTO, idCompany);
 
         return new ResponseEntity<>(companySocialNetwork, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompanySocialNetwork> findCompanySocialNetworkById(@PathVariable UUID id){
+    public ResponseEntity<CompanySocialNetwork> findCompanySocialNetworkById(@PathVariable UUID id) {
         CompanySocialNetwork companySocialNetwork = companySocialNetworkService.findCompanySocialNetworkById(id);
 
         return new ResponseEntity<>(companySocialNetwork, HttpStatus.OK);
@@ -46,26 +46,26 @@ public class CompanySocialNetworkController {
 
     @GetMapping("/{idCompany}")
     public ResponseEntity<List<CompanySocialNetwork>> findCompanySocialNetworkByCompanyId(
-        @PathVariable UUID idCompany
-    ){
-        List<CompanySocialNetwork> companySocialNetworks = companySocialNetworkService.findCompanySocialNetworkByCompanyId(idCompany);
+            @PathVariable UUID idCompany) {
+        List<CompanySocialNetwork> companySocialNetworks = companySocialNetworkService
+                .findCompanySocialNetworkByCompanyId(idCompany);
 
         return new ResponseEntity<>(companySocialNetworks, HttpStatus.OK);
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<CompanySocialNetwork> editCompanySocialNetwork(
-        @PathVariable UUID id, 
-        @RequestBody CompanySocialNetworkDTO companySocialNetworkDTO
-    ){
-        CompanySocialNetwork companySocialNetworkEdit = companySocialNetworkService.updateCompanySocialNetwork(id, companySocialNetworkDTO);
-        
+            @PathVariable UUID id,
+            @RequestBody CompanySocialNetworkDTO companySocialNetworkDTO) {
+        CompanySocialNetwork companySocialNetworkEdit = companySocialNetworkService.updateCompanySocialNetwork(id,
+                companySocialNetworkDTO);
+
         return new ResponseEntity<>(companySocialNetworkEdit, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void removeCompanySocialNetwork(@PathVariable UUID id){
+    public void removeCompanySocialNetwork(@PathVariable UUID id) {
         this.companySocialNetworkService.deleteCompanySocialNetwork(id);
     }
-    
+
 }
