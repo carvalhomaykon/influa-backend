@@ -4,6 +4,8 @@ import com.influa.influa.dtos.socialnetwork.CompanySocialNetworkDTO;
 import com.influa.influa.model.socialnetwork.CompanySocialNetwork;
 import com.influa.influa.model.user.Company;
 import com.influa.influa.repositories.socialnetwork.CompanySocialNetworkRepository;
+import com.influa.influa.repositories.user.CompanyRepository;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,35 +19,38 @@ public class CompanySocialNetworkService {
     @Autowired
     private CompanySocialNetworkRepository companySocialNetworkRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Transactional
-    public CompanySocialNetwork create(CompanySocialNetworkDTO companySocialNetworkDTO) {
-        CompanySocialNetwork socialNetwork = new CompanySocialNetwork(companySocialNetworkDTO);
+    public CompanySocialNetwork createCompanySocialNetwork(CompanySocialNetworkDTO companySocialNetworkDTO, UUID idCompany) {
 
-        return companySocialNetworkRepository.save(socialNetwork);
+        Company company = companyRepository.findById(idCompany)
+            .orElseThrow(() -> new RuntimeException("Company não encontrado com o ID: " + idCompany)
+        );
+
+        CompanySocialNetwork companySocialNetwork = new CompanySocialNetwork(companySocialNetworkDTO);
+        companySocialNetwork.setCompany(company);
+
+        return companySocialNetworkRepository.save(companySocialNetwork);
+        
     }
 
     @Transactional()
-    public List<CompanySocialNetwork> findAll() {
-        return companySocialNetworkRepository.findAll();
+    public CompanySocialNetwork findCompanySocialNetworkById(UUID id) {
+        return companySocialNetworkRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("CompanySocialNetwork não encontrado com o ID: " + id)
+        );
     }
-
-
-    @Transactional()
-    public CompanySocialNetwork findById(UUID uuid) {
-        return companySocialNetworkRepository.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("Rede social da empresa não encontrada para o ID: " + uuid));
-    }
-
-
-    public List<CompanySocialNetwork> findByCompany(Company company) {
-        return companySocialNetworkRepository.findByCompanyId(company.getId());
-    }
-
 
     @Transactional
-    public CompanySocialNetwork update(UUID uuid, CompanySocialNetworkDTO companySocialNetworkDTO) {
-        CompanySocialNetwork existingNetwork = findById(uuid);
+    public List<CompanySocialNetwork> findCompanySocialNetworkByCompanyId(UUID companyId) {
+        return companySocialNetworkRepository.findAllByCompanyId(companyId);
+    }
+
+    @Transactional
+    public CompanySocialNetwork updateCompanySocialNetwork(UUID id, CompanySocialNetworkDTO companySocialNetworkDTO) {
+        CompanySocialNetwork existingNetwork = findCompanySocialNetworkById(id);
 
         existingNetwork.setPlatform(companySocialNetworkDTO.socialNetworkDTO().enumPlatform());
         existingNetwork.setUsername(companySocialNetworkDTO.socialNetworkDTO().username());
@@ -57,8 +62,8 @@ public class CompanySocialNetworkService {
 
 
     @Transactional
-    public void delete(UUID uuid) {
-        CompanySocialNetwork socialNetwork = findById(uuid);
+    public void deleteCompanySocialNetwork(UUID id) {
+        CompanySocialNetwork socialNetwork = findCompanySocialNetworkById(id);
         companySocialNetworkRepository.delete(socialNetwork);
     }
 

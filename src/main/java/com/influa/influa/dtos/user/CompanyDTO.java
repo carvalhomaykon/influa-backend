@@ -1,7 +1,7 @@
 package com.influa.influa.dtos.user;
 
 public record CompanyDTO (
-        String company,
+        String companyName,
         String cnpj,
         String cep,
         String description,

@@ -20,8 +20,6 @@ public class CompanySocialNetwork extends SocialNetwork{
 
     public CompanySocialNetwork (CompanySocialNetworkDTO companySocialNetworkDTO) {
         super (companySocialNetworkDTO.socialNetworkDTO());
-
-        this.company = companySocialNetworkDTO.company();
     }
 
 }

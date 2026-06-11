@@ -3,10 +3,8 @@ package com.influa.influa.model.socialnetwork;
 import java.util.UUID;
 
 import com.influa.influa.dtos.socialnetwork.SocialNetworkDTO;
-import com.influa.influa.model.user.Influencer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

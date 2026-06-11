@@ -1,7 +1,6 @@
 package com.influa.influa.model.user;
 
 import com.influa.influa.dtos.user.InfluencerDTO;
-import com.influa.influa.dtos.user.UserDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
