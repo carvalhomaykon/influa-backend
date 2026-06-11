@@ -20,7 +20,8 @@ public class ContractorController {
     private ContractorService contractorService;
 
     @PostMapping
-    public ResponseEntity<Contractor> registerContractor(@RequestBody ContractorDTO contractorDTO) {
+    public ResponseEntity<Contractor> registerContractor(
+            @RequestBody ContractorDTO contractorDTO) {
         Contractor contractor = contractorService.createContractor(contractorDTO);
 
         return new ResponseEntity<>(contractor, HttpStatus.CREATED);
@@ -39,7 +40,8 @@ public class ContractorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contractor> updateContractor(@PathVariable UUID id, @RequestBody ContractorDTO contractorDTO) {
+    public ResponseEntity<Contractor> updateContractor(@PathVariable UUID id,
+            @RequestBody ContractorDTO contractorDTO) {
         Contractor updatedContractor = contractorService.updateContractor(id, contractorDTO);
         return ResponseEntity.ok(updatedContractor);
     }
@@ -49,6 +51,5 @@ public class ContractorController {
         contractorService.deleteContractor(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }

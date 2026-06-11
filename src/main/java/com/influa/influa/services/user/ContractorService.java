@@ -4,6 +4,7 @@ import com.influa.influa.dtos.user.ContractorDTO;
 import com.influa.influa.model.user.Contractor;
 import com.influa.influa.repositories.user.ContractorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +16,13 @@ public class ContractorService {
     @Autowired
     private ContractorRepository contractorRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Contractor createContractor(ContractorDTO contractorDTO) {
         Contractor contractor = new Contractor(contractorDTO);
+
+        contractor.setPassword(passwordEncoder.encode(contractorDTO.userDTO().password()));
 
         return contractorRepository.save(contractor);
     }
