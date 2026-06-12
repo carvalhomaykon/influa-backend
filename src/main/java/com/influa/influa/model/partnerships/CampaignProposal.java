@@ -1,10 +1,12 @@
 package com.influa.influa.model.partnerships;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import com.influa.influa.model.influencerrate.InfluencerRate;
+import com.influa.influa.model.user.Company;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +22,22 @@ public class CampaignProposal {
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     private String title;
     private String description;
 
     private EnumStatusProposal status;
 
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
+    @ManyToOne
+    @JoinColumn(name = "influencer_rate_id", nullable = false)
+    private InfluencerRate influencerRate;
+
+    private BigDecimal bidValue; 
+    
+    private Integer requestedAmount; 
 }

@@ -1,13 +1,12 @@
 package com.influa.influa.controllers.user;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,15 +30,18 @@ public class CompanyController {
     @PostMapping
     public ResponseEntity<Company> registerCompany(
             @RequestBody CompanyDTO companyDTO,
-            @AuthenticationPrincipal UserDetails userLogged) {
-        Company company = companyService.createCompany(companyDTO, userLogged.getUsername());
+            Principal principal) {
+
+        Company company = companyService.createCompany(companyDTO, principal.getName());
 
         return new ResponseEntity<>(company, HttpStatus.CREATED);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Company>> findAllCompany(@AuthenticationPrincipal UserDetails userLogged) {
-        List<Company> companies = companyService.findAllByContractorId(userLogged.getUsername());
+    public ResponseEntity<List<Company>> findAllCompany(
+        Principal userLogged
+    ) {
+        List<Company> companies = companyService.findAllByContractorId(userLogged.getName());
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 

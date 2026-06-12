@@ -11,8 +11,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "social_networks")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "owner_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @AllArgsConstructor

@@ -2,6 +2,7 @@ package com.influa.influa.model.partnerships;
 
 public enum EnumStatusProposal {
     PENDING,
-    APPROVED,
+    COUNTER_OFFER,
+    ACCEPTED,
     REJECTED
 }

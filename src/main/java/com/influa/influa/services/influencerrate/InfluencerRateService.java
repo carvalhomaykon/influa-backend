@@ -4,6 +4,8 @@ import com.influa.influa.dtos.influencerrate.InfluencerRateDTO;
 import com.influa.influa.model.influencerrate.InfluencerRate;
 import com.influa.influa.model.user.Influencer;
 import com.influa.influa.repositories.influencerrate.InfluencerRateRepository;
+import com.influa.influa.repositories.user.InfluencerRepository;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,31 +19,46 @@ public class InfluencerRateService {
     @Autowired
     private InfluencerRateRepository influencerRateRepository;
 
+    @Autowired
+    private InfluencerRepository influencerRepository;
+
     @Transactional
-    public InfluencerRate create(InfluencerRateDTO influencerRateDTO) {
+    public InfluencerRate createInfluencerRate(
+        InfluencerRateDTO influencerRateDTO,
+        String influencerUsername
+    ) {
+
+        Influencer influencer = influencerRepository.findByEmail(influencerUsername)
+                .orElseThrow(() -> new RuntimeException("Influencer não encontrado para o email: " + influencerUsername));
+        
         InfluencerRate influencerRate = new InfluencerRate(influencerRateDTO);
+        influencerRate.setInfluencer(influencer);
 
         return influencerRateRepository.save(influencerRate);
     }
 
     @Transactional()
-    public List<InfluencerRate> findAll() {
-        return influencerRateRepository.findAll();
+    public List<InfluencerRate> findByInfluencer(String influencerUsername) {
+        Influencer influencer = influencerRepository.findByEmail(influencerUsername)
+                .orElseThrow(() -> new RuntimeException("Influencer não encontrado para o email: " + influencerUsername));
+
+        return influencerRateRepository.findByInfluencerId(influencer.getId());
     }
 
     @Transactional()
-    public InfluencerRate findById(UUID uuid) {
+    public InfluencerRate findInfluencerRateById(UUID uuid) {
         return influencerRateRepository.findById(uuid)
                 .orElseThrow(() -> new RuntimeException("Influencer rate não encontrada para o ID: " + uuid));
     }
 
+    @Transactional
     public List<InfluencerRate> findByInfluencer(Influencer influencer) {
         return influencerRateRepository.findByInfluencerId(influencer.getId());
     }
 
     @Transactional
-    public InfluencerRate update(UUID uuid, InfluencerRateDTO influencerRateDTO) {
-        InfluencerRate existingInfluencerRate = findById(uuid);
+    public InfluencerRate updateInfluencerRate(UUID uuid, InfluencerRateDTO influencerRateDTO) {
+        InfluencerRate existingInfluencerRate = findInfluencerRateById(uuid);
 
         existingInfluencerRate.setPlatform(influencerRateDTO.platform());
         existingInfluencerRate.setAmount(influencerRateDTO.amount());
@@ -54,8 +71,8 @@ public class InfluencerRateService {
 
 
     @Transactional
-    public void delete(UUID uuid) {
-        InfluencerRate influencerRate = findById(uuid);
+    public void deleteInfluencerRate(UUID uuid) {
+        InfluencerRate influencerRate = findInfluencerRateById(uuid);
         influencerRateRepository.delete(influencerRate);
     }
 

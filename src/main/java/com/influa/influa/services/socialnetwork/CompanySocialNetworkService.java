@@ -44,7 +44,7 @@ public class CompanySocialNetworkService {
     }
 
     @Transactional
-    public List<CompanySocialNetwork> findCompanySocialNetworkByCompanyId(UUID companyId) {
+    public List<CompanySocialNetwork> findAllCompanySocialNetworkByCompanyId(UUID companyId) {
         return companySocialNetworkRepository.findAllByCompanyId(companyId);
     }
 

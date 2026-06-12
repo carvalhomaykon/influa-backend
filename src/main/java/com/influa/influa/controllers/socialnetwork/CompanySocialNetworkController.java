@@ -37,20 +37,21 @@ public class CompanySocialNetworkController {
         return new ResponseEntity<>(companySocialNetwork, HttpStatus.CREATED);
     }
 
+    @GetMapping("/company/{idCompany}")
+    public ResponseEntity<List<CompanySocialNetwork>> findAllCompanySocialNetworkByCompanyId(
+        @PathVariable UUID idCompany
+    ) {
+        List<CompanySocialNetwork> companySocialNetworks = companySocialNetworkService
+            .findAllCompanySocialNetworkByCompanyId(idCompany);
+
+        return new ResponseEntity<>(companySocialNetworks, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CompanySocialNetwork> findCompanySocialNetworkById(@PathVariable UUID id) {
         CompanySocialNetwork companySocialNetwork = companySocialNetworkService.findCompanySocialNetworkById(id);
 
         return new ResponseEntity<>(companySocialNetwork, HttpStatus.OK);
-    }
-
-    @GetMapping("/{idCompany}")
-    public ResponseEntity<List<CompanySocialNetwork>> findCompanySocialNetworkByCompanyId(
-            @PathVariable UUID idCompany) {
-        List<CompanySocialNetwork> companySocialNetworks = companySocialNetworkService
-                .findCompanySocialNetworkByCompanyId(idCompany);
-
-        return new ResponseEntity<>(companySocialNetworks, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

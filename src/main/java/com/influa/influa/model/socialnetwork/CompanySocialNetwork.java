@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("COMPANY")
 @Getter
 @Setter
 @NoArgsConstructor
 public class CompanySocialNetwork extends SocialNetwork{
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_uuid", nullable = false)
+    @ManyToOne()
+    @JoinColumn(name = "company_uuid", nullable = true)
     private Company company;
 
     public CompanySocialNetwork (CompanySocialNetworkDTO companySocialNetworkDTO) {

@@ -1,5 +1,6 @@
 package com.influa.influa.controllers.socialnetwork;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,23 +28,27 @@ public class InfluencerSocialNetworkController {
     private InfluencerSocialNetworkService influencerSocialNetworkService;
 
     @PostMapping
-    public ResponseEntity<InfluencerSocialNetwork> create(
-            @RequestBody InfluencerSocialNetworkDTO influencerSocialNetworkDTO) {
-        InfluencerSocialNetwork socialNetwork = influencerSocialNetworkService.create(influencerSocialNetworkDTO);
+    public ResponseEntity<InfluencerSocialNetwork> createInfluencerSocialNetwork(
+        @RequestBody InfluencerSocialNetworkDTO influencerSocialNetworkDTO,
+        Principal principal
+    ) {
+        InfluencerSocialNetwork socialNetwork = influencerSocialNetworkService.create(influencerSocialNetworkDTO, principal.getName());
 
         return new ResponseEntity<>(socialNetwork, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<InfluencerSocialNetwork>> findAll() {
-        List<InfluencerSocialNetwork> socialNetworks = influencerSocialNetworkService.findAll();
+    public ResponseEntity<List<InfluencerSocialNetwork>> findAllByInfluencer(
+        Principal principal
+    ) {
+        List<InfluencerSocialNetwork> socialNetworks = influencerSocialNetworkService.findAllByInfluencer(principal.getName());
 
         return new ResponseEntity<>(socialNetworks, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InfluencerSocialNetwork> findById(@PathVariable UUID id) {
-        InfluencerSocialNetwork socialNetwork = influencerSocialNetworkService.findById(id);
+    public ResponseEntity<InfluencerSocialNetwork> findInfluencerSocialNetworkById(@PathVariable UUID id) {
+        InfluencerSocialNetwork socialNetwork = influencerSocialNetworkService.findInfluencerSocialNetworkById(id);
 
         return new ResponseEntity<>(socialNetwork, HttpStatus.OK);
     }
@@ -52,7 +57,7 @@ public class InfluencerSocialNetworkController {
     public ResponseEntity<InfluencerSocialNetwork> update(
             @PathVariable UUID id,
             @RequestBody InfluencerSocialNetworkDTO influencerSocialNetworkDTO) {
-        InfluencerSocialNetwork socialNetworkEdit = influencerSocialNetworkService.update(id,
+        InfluencerSocialNetwork socialNetworkEdit = influencerSocialNetworkService.updateInfluencerSocialNetwork(id,
                 influencerSocialNetworkDTO);
 
         return new ResponseEntity<>(socialNetworkEdit, HttpStatus.OK);
@@ -60,7 +65,7 @@ public class InfluencerSocialNetworkController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        influencerSocialNetworkService.delete(id);
+        influencerSocialNetworkService.deleteInfluencerSocialNetwork(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -4,6 +4,7 @@ import com.influa.influa.dtos.socialnetwork.InfluencerSocialNetworkDTO;
 import com.influa.influa.model.socialnetwork.InfluencerSocialNetwork;
 import com.influa.influa.model.user.Influencer;
 import com.influa.influa.repositories.socialnetwork.InfluencerSocialNetworkRepository;
+import com.influa.influa.repositories.user.InfluencerRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -19,34 +20,42 @@ public class InfluencerSocialNetworkService {
     @Autowired
     private InfluencerSocialNetworkRepository influencerSocialNetworkRepository;
 
+    @Autowired
+    private InfluencerRepository influencerRepository;
+
     @Transactional
-    public InfluencerSocialNetwork create(InfluencerSocialNetworkDTO influencerSocialNetworkDTO) {
+    public InfluencerSocialNetwork create(InfluencerSocialNetworkDTO influencerSocialNetworkDTO, String influencerUsername) {
+
+        Influencer influencer = influencerRepository.findByEmail(influencerUsername)
+            .orElseThrow(() -> new RuntimeException("Influenciador não encontrado com o username: " + influencerUsername)
+        );
+
         InfluencerSocialNetwork socialNetwork = new InfluencerSocialNetwork(influencerSocialNetworkDTO);
+        socialNetwork.setInfluencer(influencer);
 
         return influencerSocialNetworkRepository.save(socialNetwork);
     }
 
     @Transactional()
-    public List<InfluencerSocialNetwork> findAll() {
-        return influencerSocialNetworkRepository.findAll();
-    }
+    public List<InfluencerSocialNetwork> findAllByInfluencer(String influencerUsername) {
 
+        Influencer influencer = influencerRepository.findByEmail(influencerUsername)
+            .orElseThrow(() -> new RuntimeException("Influenciador não encontrado com o username: " + influencerUsername)
+        );
 
-    @Transactional()
-    public InfluencerSocialNetwork findById(UUID uuid) {
-        return influencerSocialNetworkRepository.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("Rede social do influenciador não encontrada para o ID: " + uuid));
-    }
-
-
-    public List<InfluencerSocialNetwork> findByInfluencer(Influencer influencer) {
         return influencerSocialNetworkRepository.findByInfluencerId(influencer.getId());
     }
 
 
+    @Transactional()
+    public InfluencerSocialNetwork findInfluencerSocialNetworkById(UUID uuid) {
+        return influencerSocialNetworkRepository.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("Rede social do influenciador não encontrada para o ID: " + uuid));
+    }
+
     @Transactional
-    public InfluencerSocialNetwork update(UUID uuid, InfluencerSocialNetworkDTO influencerSocialNetworkDTO) {
-        InfluencerSocialNetwork existingNetwork = findById(uuid);
+    public InfluencerSocialNetwork updateInfluencerSocialNetwork(UUID uuid, InfluencerSocialNetworkDTO influencerSocialNetworkDTO) {
+        InfluencerSocialNetwork existingNetwork = findInfluencerSocialNetworkById(uuid);
 
         existingNetwork.setPlatform(influencerSocialNetworkDTO.socialNetworkDTO().enumPlatform());
         existingNetwork.setUsername(influencerSocialNetworkDTO.socialNetworkDTO().username());
@@ -58,8 +67,8 @@ public class InfluencerSocialNetworkService {
 
 
     @Transactional
-    public void delete(UUID uuid) {
-        InfluencerSocialNetwork socialNetwork = findById(uuid);
+    public void deleteInfluencerSocialNetwork(UUID uuid) {
+        InfluencerSocialNetwork socialNetwork = findInfluencerSocialNetworkById(uuid);
         influencerSocialNetworkRepository.delete(socialNetwork);
     }
 

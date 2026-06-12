@@ -1,5 +1,6 @@
 package com.influa.influa.controllers.influencerrate;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,38 +29,40 @@ public class InfluencerRateController {
 
     @PostMapping
     public ResponseEntity<InfluencerRate> create(
-            @RequestBody InfluencerRateDTO influencerRateDTO) {
-        InfluencerRate influencerRate = influencerRateService.create(influencerRateDTO);
+        @RequestBody InfluencerRateDTO influencerRateDTO,
+        Principal principal
+    ) {
+        InfluencerRate influencerRate = influencerRateService.createInfluencerRate(influencerRateDTO, principal.getName());
 
         return new ResponseEntity<>(influencerRate, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<InfluencerRate>> findAll() {
-        List<InfluencerRate> influencerRates = influencerRateService.findAll();
+    public ResponseEntity<List<InfluencerRate>> findAllByInfluencer(Principal principal) {
+        List<InfluencerRate> influencerRates = influencerRateService.findByInfluencer(principal.getName());
 
         return new ResponseEntity<>(influencerRates, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InfluencerRate> findById(@PathVariable UUID id) {
-        InfluencerRate influencerRate = influencerRateService.findById(id);
+    public ResponseEntity<InfluencerRate> findInfluencerRateById(@PathVariable UUID id) {
+        InfluencerRate influencerRate = influencerRateService.findInfluencerRateById(id);
 
         return new ResponseEntity<>(influencerRate, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InfluencerRate> update(
+    public ResponseEntity<InfluencerRate> updateInfluencerRate(
             @PathVariable UUID id,
             @RequestBody InfluencerRateDTO influencerRateDTO) {
-        InfluencerRate influencerRateEdit = influencerRateService.update(id, influencerRateDTO);
+        InfluencerRate influencerRateEdit = influencerRateService.updateInfluencerRate(id, influencerRateDTO);
 
         return new ResponseEntity<>(influencerRateEdit, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        influencerRateService.delete(id);
+    public ResponseEntity<Void> deleteInfluencerRate(@PathVariable UUID id) {
+        influencerRateService.deleteInfluencerRate(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
