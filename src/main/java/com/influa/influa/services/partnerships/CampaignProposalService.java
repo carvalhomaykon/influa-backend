@@ -9,7 +9,8 @@ import com.influa.influa.model.user.Company;
 import com.influa.influa.repositories.influencerrate.InfluencerRateRepository;
 import com.influa.influa.repositories.partnerships.CampaignProposalRepository;
 import com.influa.influa.repositories.user.CompanyRepository;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,29 +19,30 @@ import java.util.UUID;
 @Service
 public class CampaignProposalService {
 
-    private final CampaignProposalRepository proposalRepository;
-    private final InfluencerRateRepository rateRepository;
-    private final CompanyRepository companyRepository;
-    private final PartnershipAgreementService agreementService;
+    @Autowired
+    private CampaignProposalRepository proposalRepository;
+
+    @Autowired
+    private InfluencerRateRepository rateRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
+    private PartnershipAgreementService agreementService;
 
     @Transactional
     public CampaignProposalResponseDTO createProposal(UUID companyId, CampaignProposalRequestDTO dto) {
-        // 1. Buscar a empresa contratante (simulando que o ID vem do token/sessão)
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-        // 2. Buscar a tabela de preço do influenciador
         InfluencerRate rate = rateRepository.findById(dto.influencerRateId())
                 .orElseThrow(() -> new RuntimeException("Tabela de preço do influenciador não encontrada"));
 
-        // 3. Regra de Negócio: Validar se o lance está dentro ou próximo do limite aceitável
         if (dto.bidValue().compareTo(rate.getStartingPrice()) < 0 || dto.bidValue().compareTo(rate.getEndPrice()) > 0) {
-            // Aqui você pode decidir se bloqueia ou se apenas envia como um lance fora do escopo.
-            // Vamos lançar uma exceção caso queira blindar o fluxo, ou remover o IF se o lance for livre.
             throw new IllegalArgumentException("O valor do lance está fora da faixa estipulada pelo influenciador.");
         }
 
-        // 4. Mapear DTO para Entidade
         CampaignProposal proposal = new CampaignProposal();
         proposal.setTitle(dto.title());
         proposal.setDescription(dto.description());
@@ -49,7 +51,7 @@ public class CampaignProposalService {
         proposal.setInfluencerRate(rate);
         proposal.setBidValue(dto.bidValue());
         proposal.setRequestedAmount(dto.requestedAmount());
-
+        
         CampaignProposal savedProposal = proposalRepository.save(proposal);
 
         return convertToResponseDTO(savedProposal);
@@ -84,10 +86,11 @@ public class CampaignProposalService {
                 proposal.getStatus(),
                 proposal.getBidValue(),
                 proposal.getRequestedAmount(),
+
                 new CampaignProposalResponseDTO.CompanySummaryDTO(
                         proposal.getCompany().getId(),
-                        proposal.getCompany().getName(),
-                        proposal.getCompany().getLogoUrl()
+                        proposal.getCompany().getCompanyName(),
+                        proposal.getCompany().getCnpj()
                 ),
                 new CampaignProposalResponseDTO.InfluencerRateSummaryDTO(
                         proposal.getInfluencerRate().getId(),

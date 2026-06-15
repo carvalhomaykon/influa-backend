@@ -1,10 +1,12 @@
 package com.influa.influa.services.partnerships;
 
 import com.influa.influa.model.partnerships.CampaignProposal;
-import com.influa.influa.model.partnerships.EnumStatusAgreement;
+import com.influa.influa.model.partnerships.EnumStatusProposal;
 import com.influa.influa.model.partnerships.PartnershipAgreement;
 import com.influa.influa.repositories.partnerships.PartnershipAgreementRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PartnershipAgreementService {
 
-    private final PartnershipAgreementRepository agreementRepository;
+    @Autowired
+    private PartnershipAgreementRepository agreementRepository;
 
     @Transactional
     public void createAgreement(CampaignProposal proposal) {
         PartnershipAgreement agreement = new PartnershipAgreement();
+        
         agreement.setCampaignProposal(proposal);
-        agreement.setStatus(EnumStatusAgreement.IN_PROGRESS); // Iniciado em andamento
+        agreement.setStatus(EnumStatusProposal.ACCEPTED);
 
         agreementRepository.save(agreement);
     }
