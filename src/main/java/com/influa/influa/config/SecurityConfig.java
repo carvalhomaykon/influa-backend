@@ -49,10 +49,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
-                                .requestMatchers("/auth").permitAll()
-                                .requestMatchers("/users/**").permitAll()
-                                .requestMatchers("/socialnetwork/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+                        
+                                .requestMatchers(HttpMethod.POST, "/users/influencers").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/contractors").permitAll()
 
                                 .anyRequest().authenticated()
                 )
@@ -73,7 +73,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
