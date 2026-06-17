@@ -26,6 +26,10 @@ public class CompanyService {
     @Transactional
     public Company createCompany(CompanyDTO companyDTO, String emailLogado) {
 
+        if (companyDTO.niche() == null || companyDTO.niche().trim().isEmpty()) {
+            throw new IllegalArgumentException("O campo \"Nicho\" é obrigatório");
+        }
+
         Contractor contractor = contractorRepository.findByEmail(emailLogado).orElseThrow(
             () -> new RuntimeException("Contract não encontrado com o email: " + emailLogado)
         );
